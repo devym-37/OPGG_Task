@@ -83,7 +83,7 @@ const SoloRank = ({ searchResult }) => {
         <Container>
           <SoloContainer>
             <TierImage>
-              <Img src={soloRank.tierRank.imageUrl} />
+              <Img src={soloRank.tierRank.imageUrl} alt="rank image" />
             </TierImage>
             <TierRankInfo>
               <RankType>
@@ -106,7 +106,10 @@ const SoloRank = ({ searchResult }) => {
         <Container>
           <SoloContainer>
             <TierImage>
-              <Img src="https://opgg-static.akamaized.net/images/medals/default.png" />
+              <Img
+                src="https://opgg-static.akamaized.net/images/medals/default.png"
+                alt="unranked image"
+              />
             </TierImage>
             <TierRankInfo>
               <RankType>솔로랭크</RankType>

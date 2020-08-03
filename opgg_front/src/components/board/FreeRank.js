@@ -90,7 +90,7 @@ const FreeRank = ({ searchResult }) => {
       {!freeRank.hasResults ? (
         <Container>
           <FreeContainer>
-            <Img src={freeRank.tierRank.imageUrl} />
+            <Img src={freeRank.tierRank.imageUrl} alt="rank image" />
             <TierRankInfo>
               <RankType>{freeRank.tierRank.name}</RankType>
               <TierRank>{`${freeRank.tierRank.string}`}</TierRank>
@@ -107,7 +107,10 @@ const FreeRank = ({ searchResult }) => {
       ) : (
         <Container>
           <FreeContainer>
-            <Img src="https://opgg-static.akamaized.net/images/medals/default.png" />
+            <Img
+              src="https://opgg-static.akamaized.net/images/medals/default.png"
+              alt="unranked image"
+            />
             <FreeUnRanked>
               <UnRankType>{freeRank.tierRank.name}</UnRankType>
               <Unranked>Unranked</Unranked>

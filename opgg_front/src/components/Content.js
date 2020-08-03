@@ -16,7 +16,7 @@ const Content = ({ searchResult, playerMost, playerMatch }) => (
   <>
     {searchResult ? (
       <Container>
-        <SideContents searchResult={searchResult} />
+        <SideContents searchResult={searchResult} playerMost={playerMost} />
         <MainContents />
       </Container>
     ) : null}

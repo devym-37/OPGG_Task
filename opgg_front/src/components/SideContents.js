@@ -2,26 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import SoloRank from "./board/SoloRank";
 import FreeRank from "./board/FreeRank";
+import MostChampion from "./board/MostChampion";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
   margin-right: 10px;
-`;
-
-const Box1 = styled.div`
-  height: 124px;
-  border: 1px solid #cdd2d2;
-  margin-bottom: 8px;
-  background-color: red;
-`;
-
-const Box2 = styled.div`
-  height: 98px;
-  border: 1px solid #cdd2d2;
-  margin-bottom: 8px;
-  background-color: blue;
 `;
 
 const Box3 = styled.div`
@@ -38,12 +25,12 @@ const Box4 = styled.div`
   background-color: yellow;
 `;
 
-const SideContents = ({ searchResult }) => (
+const SideContents = ({ searchResult, playerMost }) => (
   <>
     <Container>
       <SoloRank searchResult={searchResult} />
       <FreeRank searchResult={searchResult} />
-      <Box3></Box3>
+      <MostChampion playerMost={playerMost} />
       <Box4></Box4>
     </Container>
   </>
