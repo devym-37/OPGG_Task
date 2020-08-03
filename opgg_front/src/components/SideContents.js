@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import SoloRank from "./board/SoloRank";
+import FreeRank from "./board/FreeRank";
 
 const Container = styled.div`
   display: flex;
@@ -36,11 +38,11 @@ const Box4 = styled.div`
   background-color: yellow;
 `;
 
-const SideContents = () => (
+const SideContents = ({ searchResult }) => (
   <>
     <Container>
-      <Box1></Box1>
-      <Box2></Box2>
+      <SoloRank searchResult={searchResult} />
+      <FreeRank searchResult={searchResult} />
       <Box3></Box3>
       <Box4></Box4>
     </Container>
