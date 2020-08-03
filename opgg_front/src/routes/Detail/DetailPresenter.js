@@ -5,10 +5,18 @@ import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
 import Loader from "../../components/Loader";
 import Header from "../../components/Header";
+import Content from "../../components/Content";
 
 const Container = styled.div`
   height: 273px;
   padding-top: 97px;
+`;
+
+const ContentsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+  border-top: 1px solid #cdd2d2;
 `;
 
 const IHeader = styled.div`
@@ -71,9 +79,10 @@ const Button = styled.button`
 const DetailPresenter = ({
   playerName,
   searchResult,
+  playerMost,
+  playerMatch,
   loading,
   error,
-  history,
   handleSearchTerm,
   helmetTitle,
   fetchApi,
@@ -84,37 +93,45 @@ const DetailPresenter = ({
         playerName ? playerName : helmetTitle.params.playerName
       } 정보 | OPGG`}</title>
     </Helmet>
-    <IHeader>
-      <Search>
-        <Input
-          type="text"
-          placeholder={"소환사명, 챔피언··· "}
-          width="100"
-          value={playerName}
-          onChange={handleSearchTerm}
-        />
-        <Link to={`/searchPlayer/${playerName}`}>
-          {console.log("history", history)}
-          {console.log("playerName", playerName)}
-          <Button onClick={() => fetchApi(playerName)}>
-            <IButton
-              src="https://opgg-static.akamaized.net/images/gnb/svg/00-icon-gg.svg"
-              height="14px"
-              alt="opgg_logo"
+    {loading ? (
+      <Loader />
+    ) : (
+      <>
+        <IHeader>
+          <Search>
+            <Input
+              type="text"
+              placeholder={"소환사명, 챔피언··· "}
+              width="100"
+              value={playerName}
+              onChange={handleSearchTerm}
             />
-          </Button>
-        </Link>
-      </Search>
-    </IHeader>
-    <Container>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Header searchResult={searchResult} />
-        </>
-      )}
-    </Container>
+            <Link to={`/searchPlayer/${playerName}`}>
+              <Button onClick={() => fetchApi(playerName)}>
+                <IButton
+                  src="https://opgg-static.akamaized.net/images/gnb/svg/00-icon-gg.svg"
+                  height="14px"
+                  alt="opgg_logo"
+                />
+              </Button>
+            </Link>
+          </Search>
+        </IHeader>
+        <Container>
+          <Header searchResult={searchResult} error={error} />
+        </Container>
+        {searchResult ? (
+          <ContentsContainer>
+            <Content
+              searchResult={searchResult}
+              playerMost={playerMost}
+              playerMatch={playerMatch}
+              error={error}
+            />
+          </ContentsContainer>
+        ) : null}
+      </>
+    )}
   </>
 );
 

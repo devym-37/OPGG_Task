@@ -14,7 +14,7 @@ const globalStyles = createGlobalStyle`
         font-family:-apple-system, 'Helvetica Neue', Helvetica, "Malgun Gothic", "Apple SD Gothic Neo", AppleGothic, Dotum, Arial, Tahoma, sans-serif;
         font-size:12px;
         background-color:#eaeaea;
-        overflow: hidden;
+        overflow-x: hidden;
     }   
 `;
 

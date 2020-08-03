@@ -30,9 +30,6 @@ class DetailContainer extends React.Component {
   };
 
   fetchApi = async (term) => {
-    console.dir("term1234", term);
-    console.log("term", term);
-    console.log("term typeof", typeof term);
     const searchTerm = encodeURIComponent(term);
     this.setState({
       loading: true,
@@ -67,7 +64,6 @@ class DetailContainer extends React.Component {
     } = event;
     this.setState({
       playerName: value,
-      loading: true,
     });
     this.props.handleReduxPlayer(value);
   };
@@ -80,6 +76,8 @@ class DetailContainer extends React.Component {
       error,
       helmetTitle,
       history,
+      playerMost,
+      playerMatch,
     } = this.state;
     const { handleSearchTerm, fetchApi } = this;
     console.log("searchResult", searchResult);
@@ -89,6 +87,8 @@ class DetailContainer extends React.Component {
       <DetailPresenter
         helmetTitle={helmetTitle}
         searchResult={searchResult}
+        playerMost={playerMost}
+        playerMatch={playerMatch}
         playerName={playerName}
         history={history}
         loading={loading}
