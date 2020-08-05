@@ -152,10 +152,10 @@ const MostChampion = ({ playerMost }) => {
       <Container>
         <TableContainer>
           <ActiveTab>
-            <a>챔피언 승률</a>
+            <span>챔피언 승률</span>
           </ActiveTab>
           <DisabledTab>
-            <a>7일간 랭크 승률</a>
+            <span>7일간 랭크 승률</span>
           </DisabledTab>
         </TableContainer>
         {champions.map((champion) => (

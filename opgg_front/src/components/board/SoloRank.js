@@ -64,8 +64,6 @@ const Wins = styled.span``;
 const Losses = styled.span``;
 const WinRatio = styled.span``;
 
-const LeagueName = styled.div``;
-
 const Unranked = styled.div`
   font-size: 13px;
   font-weight: bold;

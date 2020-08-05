@@ -191,10 +191,10 @@ const RecentWinRatio = ({ playerMost }) => {
       <Container>
         <TableContainer>
           <DisabledTab>
-            <a>챔피언 승률</a>
+            <span>챔피언 승률</span>
           </DisabledTab>
           <ActiveTab>
-            <a>7일간 랭크 승률</a>
+            <span>7일간 랭크 승률</span>
           </ActiveTab>
         </TableContainer>
         {champions.map((champion) => (
