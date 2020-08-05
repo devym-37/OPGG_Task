@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const KdaContainer = styled.div`
@@ -15,9 +16,7 @@ const Kda = styled.div`
 `;
 const KDAInfo = styled.span`
   font-weight: bold;
-  color: #555e5e;
-  /* death는 아래색 */
-  /* color: #c6443e; */
+  color: ${(props) => (props.death ? "#d0021b" : "#555e5e")};
 `;
 const KDARatio = styled.div`
   color: #555e5e;
@@ -57,30 +56,42 @@ const TextAce = styled.span`
   border: solid 1px #7f3590;
 `;
 
-const KDA = ({ kill, death, assist, ratio, multikill, textAce }) => (
+const KDA = ({ kdaInfo }) => (
   <>
     <KdaContainer>
       <Kda>
-        <KDAInfo>{kill}</KDAInfo>
+        <KDAInfo>{kdaInfo.kill}</KDAInfo>
         {` / `}
-        <KDAInfo>{death}</KDAInfo>
+        <KDAInfo death={kdaInfo.death}>{kdaInfo.death}</KDAInfo>
         {` / `}
-        <KDAInfo>{assist}</KDAInfo>
+        <KDAInfo>{kdaInfo.assist}</KDAInfo>
       </Kda>
       <KDARatio>
-        <RatioSpan>{ratio}</RatioSpan>
+        <RatioSpan>{kdaInfo.kdaString}</RatioSpan>
         {` 평점`}
       </KDARatio>
-      <MultiKill>
-        <Kill>{multikill}</Kill>
-      </MultiKill>
-      <Badge>
-        <TextAce>{textAce}</TextAce>
-      </Badge>
+      {kdaInfo.largestMultiKillString !== "" ? (
+        <MultiKill>
+          <Kill>
+            {kdaInfo.largestMultiKillString === "Double Kill"
+              ? "더블킬"
+              : kdaInfo.largestMultiKillString === "Triple Kill"
+              ? "트리플킬"
+              : kdaInfo.largestMultiKillString}
+          </Kill>
+        </MultiKill>
+      ) : null}
+      {kdaInfo.opScoreBadge !== "" ? (
+        <Badge>
+          <TextAce>{kdaInfo.opScoreBadge}</TextAce>
+        </Badge>
+      ) : null}
     </KdaContainer>
   </>
 );
 
-KDA.propTypes = {};
+KDA.propTypes = {
+  kdaInfo: PropTypes.object,
+};
 
 export default KDA;
