@@ -41,7 +41,7 @@ const GameStats = ({ gameType, day, gameResult, gameLength }) => (
     <Container>
       <GameType>{gameType}</GameType>
       <TimeStamp>
-        <Day>2달전</Day>
+        <Day>{day}</Day>
       </TimeStamp>
       <Bar gameResult={gameResult}></Bar>
       <GameResult gameResult={gameResult}>
@@ -54,6 +54,7 @@ const GameStats = ({ gameType, day, gameResult, gameLength }) => (
 
 GameStats.propTypes = {
   gameType: PropTypes.string,
+  day: PropTypes.string,
   gameResult: PropTypes.bool,
   gameLength: PropTypes.number,
 };
