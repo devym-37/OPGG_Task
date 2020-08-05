@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -82,33 +83,38 @@ const CName = styled.span`
   color: inherit;
 `;
 
-const GameSettingsInfo = () => (
+const GameSettingsInfo = ({ image, spells, runes, champion }) => (
   <>
     <Container>
       <ChampionImage>
-        <Image src={"주소"} alt="정보" />
+        <Image src={image} alt="championImage" />
       </ChampionImage>
       <Spell>
-        {
+        {spells.map((spell, index) => (
           <SpellContent>
-            <SpellImg src={"주소"} alt="정보" />
+            <SpellImg src={spell.imageUrl} alt={`${index} spell`} />
           </SpellContent>
-        }
+        ))}
       </Spell>
       <Runes>
-        {
+        {runes.map((rune, index) => (
           <RuneItem>
-            <RuneImg src={"주소"} alt="정보" />
+            <RuneImg src={rune} alt={`${index}rune`} />
           </RuneItem>
-        }
+        ))}
       </Runes>
       <ChampionName>
-        <CName>챔피언</CName>
+        <CName>{champion}</CName>
       </ChampionName>
     </Container>
   </>
 );
 
-GameSettingsInfo.propTypes = {};
+GameSettingsInfo.propTypes = {
+  image: PropTypes.string,
+  spell: PropTypes.array,
+  champion: PropTypes.string,
+  runes: PropTypes.array,
+};
 
 export default GameSettingsInfo;
