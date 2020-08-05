@@ -36,27 +36,27 @@ const GameResult = styled.div`
 `;
 const GameLength = styled.div``;
 
-const GameStats = ({ gameType, day, gameResult, gameLength }) => (
+const GameStats = ({ gameType, gameDate, gameTime, gameResult }) => (
   <>
     <Container>
       <GameType>{gameType}</GameType>
       <TimeStamp>
-        <Day>{day}</Day>
+        <Day>{gameDate}</Day>
       </TimeStamp>
       <Bar gameResult={gameResult}></Bar>
       <GameResult gameResult={gameResult}>
         {gameResult ? "승리" : "패배"}
       </GameResult>
-      <GameLength>{gameLength}</GameLength>
+      <GameLength>{gameTime}</GameLength>
     </Container>
   </>
 );
 
 GameStats.propTypes = {
   gameType: PropTypes.string,
-  day: PropTypes.string,
+  gameDate: PropTypes.string,
   gameResult: PropTypes.bool,
-  gameLength: PropTypes.number,
+  gameTime: PropTypes.string,
 };
 
 export default GameStats;
