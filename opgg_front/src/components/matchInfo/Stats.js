@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -22,22 +23,25 @@ const B = styled.b`
   color: #353a3a;
 `;
 
-const Stats = ({ level, cs, csPerMin, killratio }) => (
+const Stats = ({ kdaInfo, level }) => (
   <>
     <Container>
-      <Level>{level}</Level>
+      <Level>레벨{level}</Level>
       <CS>
         <span>
-          {cs}
-          {`(${csPerMin})`}
+          {kdaInfo.cs}
+          {` (${kdaInfo.csPerMin}) `}
         </span>
         CS
       </CS>
-      <CKRate>{`킬관여 ${killratio}`}</CKRate>
+      <CKRate>{`킬관여 ${kdaInfo.contributionForKillRate}`}</CKRate>
     </Container>
   </>
 );
 
-Stats.propTypes = {};
+Stats.propTypes = {
+  kdaInfo: PropTypes.object,
+  level: PropTypes.number,
+};
 
 export default Stats;
