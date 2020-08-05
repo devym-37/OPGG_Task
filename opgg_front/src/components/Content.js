@@ -10,14 +10,12 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-const Contents = styled.div``;
-
 const Content = ({ searchResult, playerMost, playerMatch }) => (
   <>
     {searchResult ? (
       <Container>
         <SideContents searchResult={searchResult} playerMost={playerMost} />
-        <MainContents />
+        <MainContents playerMatch={playerMatch} />
       </Container>
     ) : null}
   </>

@@ -80,9 +80,7 @@ class DetailContainer extends React.Component {
       playerMatch,
     } = this.state;
     const { handleSearchTerm, fetchApi } = this;
-    console.log("searchResult", searchResult);
-    console.log("this.props", this.props);
-    console.log("playerName", playerName);
+
     return (
       <DetailPresenter
         helmetTitle={helmetTitle}

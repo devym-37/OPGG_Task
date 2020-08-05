@@ -120,6 +120,7 @@ const DetailPresenter = ({
         <Container>
           <Header searchResult={searchResult} error={error} />
         </Container>
+
         {searchResult ? (
           <ContentsContainer>
             <Content

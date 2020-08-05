@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import MatchResults from "./MatchResults";
+
+import PlayerMatch from "../routes/PlayerMatch";
 
 const Container = styled.div`
   display: flex;
@@ -15,13 +16,13 @@ const Box1 = styled.div`
   background-color: red;
 `;
 
-const MainContents = () => (
+const MainContents = ({ playerMatch }) => (
   <>
     <Container>
       <Box1></Box1>
-      <MatchResults />
-      <MatchResults />
-      <MatchResults />
+      {playerMatch.games.map((game) => (
+        <PlayerMatch game={game} />
+      ))}
     </Container>
   </>
 );

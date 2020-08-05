@@ -35,6 +35,7 @@ const SpellContent = styled.div`
   width: 22px;
   height: 22px;
   margin-top: 2px;
+  margin-bottom: 2px;
   border-radius: 3px;
   overflow: hidden;
   &:first-child {
@@ -55,6 +56,7 @@ const Runes = styled.div`
 const RuneItem = styled.div`
   width: 22px;
   height: 22px;
+  margin-bottom: 2px;
   &:first-child {
     margin-top: 0;
   }
