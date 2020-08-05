@@ -10,7 +10,7 @@ export const apiList = {
   getPlayerMatchList: (playName) => api.get(`/${playName}/matches`),
   getPlayerMatchDetail: (playName, gameId) =>
     api.get(`/${playName}/matchDetail/${gameId}`),
-  getItem: () =>
+  getItemList: () =>
     axios.get(
       "http://ddragon.leagueoflegends.com/cdn/10.15.1/data/ko_KR/item.json"
     ),

@@ -13,6 +13,8 @@ class PlayerMatchContainer extends React.Component {
       gameDate: null,
       gameTime: null,
       champion: null,
+      itemInfo: null,
+      itemNumber: null,
       loading: false,
       error: "",
     };
@@ -25,20 +27,27 @@ class PlayerMatchContainer extends React.Component {
     const gettimeAgo = this.getTimeAgo(gameMatch.createDate);
     const getGameTime = this.getGameLength(gameMatch.gameLength);
     const getChampion = this.getChampionName(gameMatch.champion.imageUrl);
+    const getItemNumber = this.getItemNumber(gameMatch.items);
 
     this.setState({
       loading: true,
       gameDate: gettimeAgo,
       gameTime: getGameTime,
       champion: getChampion,
+      itemNumber: getItemNumber,
     });
     try {
       const { data: matchUsers } = await apiList.getPlayerMatchDetail(
         game.summonerName,
         game.gameId
       );
+      const {
+        data: { data: itemInfo },
+      } = await apiList.getItemList();
+      console.log("itemInfo12344", itemInfo);
       this.setState({
         matchUsers,
+        itemInfo,
       });
     } catch {
       this.setState({
@@ -88,6 +97,14 @@ class PlayerMatchContainer extends React.Component {
     return champion[0];
   };
 
+  getItemNumber = (value) => {
+    const splitItemNumber = value.map((item) => item.imageUrl.split("/"));
+    const findItemNumber = splitItemNumber.map(
+      (item) => item[item.length - 1].split(".")[0]
+    );
+    return findItemNumber;
+  };
+
   render() {
     const {
       gameMatch,
@@ -95,15 +112,15 @@ class PlayerMatchContainer extends React.Component {
       gameDate,
       gameTime,
       champion,
+      itemInfo,
+      itemNumber,
       loading,
       error,
     } = this.state;
     const { game } = this.props;
 
-    console.log("gameDate", gameDate);
-    console.log("gameMatch", gameMatch);
-    console.log("matchUsers", matchUsers);
-    console.log("this.props", this.props);
+    console.log("itemNumber1234", itemNumber);
+
     return (
       <PlayerMatchPresenter
         gameMatch={gameMatch}
@@ -112,6 +129,8 @@ class PlayerMatchContainer extends React.Component {
         gameTime={gameTime}
         champion={champion}
         userName={game.summonerName}
+        itemInfo={itemInfo}
+        itemNumber={itemNumber}
         loading={loading}
         error={error}
       />

@@ -94,6 +94,8 @@ const PlayerMatchPresenter = ({
   gameTime,
   champion,
   userName,
+  itemInfo,
+  itemNumber,
   loading,
   error,
 }) => (
@@ -124,6 +126,8 @@ const PlayerMatchPresenter = ({
 
           <Items
             items={gameMatch.items}
+            itemInfo={itemInfo}
+            itemNumber={itemNumber}
             ward={gameMatch.stats.ward}
             gameResult={gameMatch.isWin}
           />
@@ -152,6 +156,8 @@ PlayerMatchPresenter.propTypes = {
   gameTime: PropTypes.string,
   champion: PropTypes.string,
   userName: PropTypes.string,
+  itemInfo: PropTypes.object,
+  itemNumber: PropTypes.array,
   error: PropTypes.string,
   loading: PropTypes.bool,
 };

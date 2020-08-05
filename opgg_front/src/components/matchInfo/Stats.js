@@ -17,11 +17,6 @@ const CS = styled.div``;
 const CKRate = styled.div`
   color: #c6443e;
 `;
-const MMR = styled.div``;
-const B = styled.b`
-  font-weight: bold;
-  color: #353a3a;
-`;
 
 const Stats = ({ kdaInfo, level }) => (
   <>

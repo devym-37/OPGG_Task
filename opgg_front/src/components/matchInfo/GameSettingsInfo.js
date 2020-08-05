@@ -93,14 +93,14 @@ const GameSettingsInfo = ({ image, spells, runes, champion }) => (
       </ChampionImage>
       <Spell>
         {spells.map((spell, index) => (
-          <SpellContent>
+          <SpellContent key={index}>
             <SpellImg src={spell.imageUrl} alt={`${index} spell`} />
           </SpellContent>
         ))}
       </Spell>
       <Runes>
         {runes.map((rune, index) => (
-          <RuneItem>
+          <RuneItem key={index}>
             <RuneImg src={rune} alt={`${index}rune`} />
           </RuneItem>
         ))}

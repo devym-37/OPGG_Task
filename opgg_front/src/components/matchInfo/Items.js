@@ -1,6 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
+
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: "1px solid #dadde9",
+  },
+}))(Tooltip);
 
 const Container = styled.div`
   display: table-cell;
@@ -56,23 +68,50 @@ const TrinKetImg = styled.img`
   vertical-align: middle;
 `;
 
-const Items = ({ items, ward, gameResult }) => {
+const Items = ({ items, itemInfo, itemNumber, ward, gameResult }) => {
   const itemlist = [...items, {}, {}, {}, {}, {}, {}, {}].slice(0, 7);
+
   return (
     <>
       <Container>
         <ItemList>
-          {itemlist.map((item) => (
+          {itemlist.map((item, index) => (
             <>
               <Item>
-                <ItemImg
-                  src={
-                    item.imageUrl === undefined
-                      ? "https://opgg-static.akamaized.net/images/pattern/opacity.1.png"
-                      : item.imageUrl
-                  }
-                  alt="item"
-                />
+                <div>
+                  {console.log("itemInfo", itemInfo)}
+                  {console.log("itemNumber", typeof itemNumber)}
+                  {console.log("index", index)}
+                </div>
+                {itemNumber && itemInfo && itemNumber[index] !== undefined ? (
+                  <HtmlTooltip
+                    title={
+                      <React.Fragment>
+                        {itemInfo[itemNumber[index]].description}
+                      </React.Fragment>
+                    }
+                    placement="top"
+                    arrow
+                  >
+                    <ItemImg
+                      src={
+                        item.imageUrl === undefined
+                          ? "https://opgg-static.akamaized.net/images/pattern/opacity.1.png"
+                          : item.imageUrl
+                      }
+                      alt="item"
+                    />
+                  </HtmlTooltip>
+                ) : (
+                  <ItemImg
+                    src={
+                      item.imageUrl === undefined
+                        ? "https://opgg-static.akamaized.net/images/pattern/opacity.1.png"
+                        : item.imageUrl
+                    }
+                    alt="item"
+                  />
+                )}
               </Item>
             </>
           ))}
@@ -106,6 +145,8 @@ const Items = ({ items, ward, gameResult }) => {
 
 Items.propTypes = {
   items: PropTypes.array,
+  itemInfo: PropTypes.object,
+  itemNumber: PropTypes.array,
   ward: PropTypes.object,
   gameResult: PropTypes.bool,
 };
