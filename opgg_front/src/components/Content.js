@@ -10,12 +10,32 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-const Content = ({ searchResult, playerMost, playerMatch }) => (
+const Content = ({
+  searchResult,
+  playerMost,
+  playerMatch,
+  error,
+  soloRank,
+  freeRank,
+  tabValue,
+  handleChangeTab,
+}) => (
   <>
     {searchResult ? (
       <Container>
-        <SideContents searchResult={searchResult} playerMost={playerMost} />
-        <MainContents playerMatch={playerMatch} />
+        <SideContents
+          searchResult={searchResult}
+          playerMost={playerMost}
+          error={error}
+        />
+        <MainContents
+          playerMatch={playerMatch}
+          soloRank={soloRank}
+          freeRank={freeRank}
+          tabValue={tabValue}
+          handleChangeTab={handleChangeTab}
+          error={error}
+        />
       </Container>
     ) : null}
   </>

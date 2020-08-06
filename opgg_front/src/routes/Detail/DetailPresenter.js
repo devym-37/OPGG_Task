@@ -86,11 +86,16 @@ const DetailPresenter = ({
   handleSearchTerm,
   helmetTitle,
   fetchApi,
+  title,
+  soloRank,
+  freeRank,
+  tabValue,
+  handleChangeTab,
 }) => (
   <>
     <Helmet>
       <title>{`소환사 ${
-        playerName ? playerName : helmetTitle.params.playerName
+        title ? title : helmetTitle.params.playerName
       } 정보 | OPGG`}</title>
     </Helmet>
     {loading ? (
@@ -127,6 +132,10 @@ const DetailPresenter = ({
               searchResult={searchResult}
               playerMost={playerMost}
               playerMatch={playerMatch}
+              soloRank={soloRank}
+              freeRank={freeRank}
+              tabValue={tabValue}
+              handleChangeTab={handleChangeTab}
               error={error}
             />
           </ContentsContainer>
@@ -140,6 +149,11 @@ DetailPresenter.propTypes = {
   playerName: PropTypes.string,
   handleSearchTerm: PropTypes.func,
   helmetTitle: PropTypes.object,
+  title: PropTypes.string,
+  soloRank: PropTypes.array,
+  freeRank: PropTypes.array,
+  tabValue: PropTypes.string,
+  handleChangeTab: PropTypes.func,
 };
 
 export default DetailPresenter;

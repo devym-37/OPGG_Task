@@ -10,13 +10,36 @@ const Container = styled.div`
   width: 690px;
 `;
 
-const MainContents = ({ playerMatch }) => (
+const MainContents = ({
+  playerMatch,
+  soloRank,
+  freeRank,
+  tabValue,
+  handleChangeTab,
+  error,
+}) => (
   <>
     <Container>
-      <GameStatsBox />
-      {playerMatch.games.map((game) => (
-        <PlayerMatch game={game} />
-      ))}
+      <GameStatsBox
+        playerMatch={playerMatch}
+        tabValue={tabValue}
+        handleChangeTab={handleChangeTab}
+        error={error}
+      />
+      {tabValue === "전체"
+        ? playerMatch &&
+          playerMatch.games.map((game) => (
+            <PlayerMatch game={game} error={error} />
+          ))
+        : null}
+      {tabValue === "솔로"
+        ? soloRank &&
+          soloRank.map((game) => <PlayerMatch game={game} error={error} />)
+        : null}
+      {tabValue === "자유"
+        ? freeRank &&
+          freeRank.map((game) => <PlayerMatch game={game} error={error} />)
+        : null}
     </Container>
   </>
 );

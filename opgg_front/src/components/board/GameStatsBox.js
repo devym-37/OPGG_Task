@@ -1,136 +1,241 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const GameStatsBox = () => (
-  <>
-    <Container>
-      <Navigation>
-        <ListType>
-          <ILink to="#">
-            <GameType>전체</GameType>
-          </ILink>
-          <ILink to="#">
-            <GameType>솔로게임</GameType>
-          </ILink>
-          <ILink to="#">
-            <GameType>자유랭크</GameType>
-          </ILink>
-        </ListType>
-      </Navigation>
-      <StatsBox>
-        <Box>
-          <StatsTable>
-            <Tbody>
-              <TrItems>
-                <TdTitle>
-                  <WinRatio>
-                    <span>20</span>
-                    {`전 `}
-                    <span>10</span>
-                    {`승 `}
-                    <span>10</span>
-                    {`패 `}
-                  </WinRatio>
-                </TdTitle>
-                <MostChampion>
-                  <MostList>
-                    {
-                      <MostItem>
-                        <MostInfo></MostInfo>
-                      </MostItem>
-                    }
-                  </MostList>
-                </MostChampion>
-                <TdTitle>선호 포지션 (랭크)</TdTitle>
-              </TrItems>
-              <TrItems>
-                <Summary>
-                  <WinRatioGraph>
-                    <GraphSummary>
-                      <Text>승률</Text>
-                    </GraphSummary>
-                  </WinRatioGraph>
-                </Summary>
-                <KDAInfo>
-                  <KDA>
-                    <KDAStats>7</KDAStats>
-                    {` / `}
-                    <KDAStats>9</KDAStats>
-                    {` / `}
-                    <KDAStats>2</KDAStats>
-                  </KDA>
-                  <KDARatio>
-                    <KDAAverage>2.2:1</KDAAverage>
-                    <CKRate>{`(킬관여율)`}</CKRate>
-                  </KDARatio>
-                </KDAInfo>
-                <Positions>
-                  <PositionInfo>
-                    {
-                      <PositionItem>
-                        <PositionImg>
-                          <PositionImage />
-                        </PositionImg>
-                        <PositionStat>
-                          <PositionName>미드</PositionName>
-                          <PositionRole>
-                            <b>75</b>%
-                          </PositionRole>
-                          <PositionWin>
-                            승률
-                            <PositionWinRatio>
-                              <b>47</b>%
-                            </PositionWinRatio>
-                          </PositionWin>
-                        </PositionStat>
-                      </PositionItem>
-                    }
-                    {
-                      <PositionItem>
-                        <PositionImg>
-                          <PositionImage />
-                        </PositionImg>
-                        <PositionStat>
-                          <PositionName>미드</PositionName>
-                          <PositionRole>
-                            <b>75</b>%
-                          </PositionRole>
-                          <PositionWin>
-                            승률
-                            <PositionWinRatio>
-                              <b>47</b>%
-                            </PositionWinRatio>
-                          </PositionWin>
-                        </PositionStat>
-                      </PositionItem>
-                    }
-                  </PositionInfo>
-                </Positions>
-                {/* 없을때 */}
-                {/* <Positions>
-                  <NotFoundInfo>
-                    {
-                      <NotFoundItem>
-                        <NotFoundImg>
-                          <NotFountImage />
-                        </NotFoundImg>
-                        <NotFoundStat>
-                          <NotFoundText>포지션 정보가 없습니다.</NotFoundText>
-                        </NotFoundStat>
-                      </NotFoundItem>
-                    }
-                  </NotFoundInfo>
-                </Positions> */}
-              </TrItems>
-            </Tbody>
-          </StatsTable>
-        </Box>
-      </StatsBox>
-    </Container>
-  </>
-);
+const GameStatsBox = ({ playerMatch, tabValue, handleChangeTab, error }) => {
+  const totalMatch = playerMatch.summary.wins + playerMatch.summary.losses;
+  const positions = [...playerMatch.positions, {}, {}].slice(0, 2);
 
+  const kda = (
+    (playerMatch.summary.kills + playerMatch.summary.assists) /
+    playerMatch.summary.deaths
+  ).toFixed(2);
+  const ckRatio = Math.round(
+    (totalMatch / (playerMatch.summary.kills + playerMatch.summary.assists)) *
+      100
+  );
+  const champions = [...playerMatch.champions, {}, {}, {}].slice(0, 3);
+  const chartData = [
+    { region: "wins", val: playerMatch.summary.wins },
+    { region: "losses", val: playerMatch.summary.losses },
+  ];
+  return (
+    <>
+      <Container>
+        <Navigation>
+          <ListType>
+            <GameType
+              data-user="전체"
+              value="전체"
+              onClick={(event) => handleChangeTab(event)}
+              tabValue={tabValue}
+            >
+              전체
+            </GameType>
+
+            <GameType
+              data-user="솔로"
+              value="솔로"
+              onClick={(event) => handleChangeTab(event)}
+              tabValue={tabValue}
+            >
+              솔로게임
+            </GameType>
+
+            <GameType
+              data-user="자유"
+              value="자유"
+              onClick={(event) => handleChangeTab(event)}
+              tabValue={tabValue}
+            >
+              자유랭크
+            </GameType>
+          </ListType>
+        </Navigation>
+        <StatsBox>
+          <Box>
+            <StatsTable>
+              <Tbody>
+                <TrItems>
+                  <TdTitle>
+                    <WinRatio>
+                      <span>{totalMatch}</span>
+                      {`전 `}
+                      <span>{playerMatch.summary.wins}</span>
+                      {`승 `}
+                      <span>{playerMatch.summary.losses}</span>
+                      {`패 `}
+                    </WinRatio>
+                  </TdTitle>
+                  <MostChampion>
+                    <MostList>
+                      {champions &&
+                        champions.map((champion) => {
+                          return champion.id !== undefined ? (
+                            <MostItem>
+                              <MostInfo>
+                                <MostImage>
+                                  <MostImg
+                                    src={champion.imageUrl}
+                                    alt="championImage"
+                                  />
+                                </MostImage>
+                                <MostName>{champion.name}</MostName>
+                                <MostWonLose>
+                                  <b>{`${Math.round(
+                                    (champion.wins /
+                                      (champion.wins + champion.losses)) *
+                                      100
+                                  )}%`}</b>
+                                  {` (`}
+                                  <span>{champion.wins}</span>
+                                  {`승 `}
+                                  <span>{champion.losses}</span>
+                                  {`패)`}
+                                </MostWonLose>
+                                <MostKDA>
+                                  <span>{`${(
+                                    (champion.kills + champion.assists) /
+                                    champion.deaths
+                                  ).toFixed(2)}`}</span>
+                                  {` 평점`}
+                                </MostKDA>
+                              </MostInfo>
+                            </MostItem>
+                          ) : (
+                            <MostNotFoundItem>
+                              <MostNotFound>
+                                <MostNotFoundImage>
+                                  <MostNotFoundImg
+                                    src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                    alt="Not Found Champion"
+                                  />
+                                </MostNotFoundImage>
+                                <MostNotFoundText>
+                                  챔피언 정보가 없습니다.
+                                </MostNotFoundText>
+                              </MostNotFound>
+                            </MostNotFoundItem>
+                          );
+                        })}
+                    </MostList>
+                  </MostChampion>
+                  <TdTitle>선호 포지션 (랭크)</TdTitle>
+                </TrItems>
+                <TrItems>
+                  <Summary>
+                    <WinRatioGraph>
+                      <GraphSummary>
+                        <ChartsContainer></ChartsContainer>
+                        <Text>
+                          {`${Math.round(
+                            (playerMatch.summary.wins / totalMatch) * 100
+                          )}%`}
+                        </Text>
+                      </GraphSummary>
+                    </WinRatioGraph>
+                  </Summary>
+                  <KDAInfo>
+                    <KDA>
+                      <KDAStats>
+                        {(playerMatch.summary.kills / totalMatch).toFixed(1)}
+                      </KDAStats>
+                      {` / `}
+                      <KDAStats death={playerMatch.summary.deaths}>
+                        {(playerMatch.summary.deaths / totalMatch).toFixed(1)}
+                      </KDAStats>
+                      {` / `}
+                      <KDAStats>
+                        {(playerMatch.summary.assists / totalMatch).toFixed(1)}
+                      </KDAStats>
+                    </KDA>
+                    <KDARatio>
+                      <KDAAverage kda={kda}>{`${kda}:1`}</KDAAverage>
+                      <CKRate>{` (${ckRatio}%)`}</CKRate>
+                    </KDARatio>
+                  </KDAInfo>
+                  <Positions>
+                    <PositionInfo>
+                      {positions && positions[0].position !== undefined ? (
+                        positions.map((position) => {
+                          return position.position !== undefined ? (
+                            <PositionItem>
+                              <PositionImg>
+                                <PositionImage
+                                  position={position.position}
+                                  src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                                />
+                              </PositionImg>
+                              <PositionStat>
+                                <PositionName>
+                                  {position.position === "TOP"
+                                    ? "탑"
+                                    : position.position === "JNG"
+                                    ? "정글"
+                                    : position.position === "MID"
+                                    ? "미드"
+                                    : position.position === "ADC"
+                                    ? "바텀"
+                                    : position.position === "SUP"
+                                    ? "서폿"
+                                    : ""}
+                                </PositionName>
+                                <PositionRole>
+                                  <b>{`${Math.round(
+                                    (position.games / totalMatch) * 100
+                                  )}`}</b>
+                                  %
+                                </PositionRole>
+                                <PositionWin>
+                                  승률
+                                  <PositionWinRatio>
+                                    <b>{`${Math.round(
+                                      (position.wins / position.games) * 100
+                                    )}`}</b>
+                                    %
+                                  </PositionWinRatio>
+                                </PositionWin>
+                              </PositionStat>
+                            </PositionItem>
+                          ) : (
+                            <NotFoundInfo>
+                              <NotFoundItem>
+                                <NotFoundImg>
+                                  <NotFountImage src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+                                </NotFoundImg>
+                                <NotFoundStat>
+                                  <NotFoundText>
+                                    포지션 정보가 없습니다.
+                                  </NotFoundText>
+                                </NotFoundStat>
+                              </NotFoundItem>
+                            </NotFoundInfo>
+                          );
+                        })
+                      ) : (
+                        <NotFoundInfo>
+                          <NotFoundItem>
+                            <NotFoundImg>
+                              <NotFountImage src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+                            </NotFoundImg>
+                            <NotFoundStat>
+                              <NotFoundText>
+                                포지션 정보가 없습니다.
+                              </NotFoundText>
+                            </NotFoundStat>
+                          </NotFoundItem>
+                        </NotFoundInfo>
+                      )}
+                    </PositionInfo>
+                  </Positions>
+                </TrItems>
+              </Tbody>
+            </StatsTable>
+          </Box>
+        </StatsBox>
+      </Container>
+    </>
+  );
+};
 export default GameStatsBox;
 
 const Container = styled.div`
@@ -154,23 +259,21 @@ const ListType = styled.ul`
   margin: 0;
   padding: 0;
 `;
-const ILink = styled(Link)`
-  :active {
-    padding-left: 10px;
-    border-bottom: 2px solid #1f8ecd;
-  }
-  :visited {
-    padding-left: 10px;
-    border-bottom: 2px solid #1f8ecd;
-  }
-`;
+
 const GameType = styled.li`
   display: inline-block;
-  height: 32px;
+  height: 36px;
   margin: 0 10px;
   vertical-align: top;
   padding-top: 12px;
   /* 선택 시 아래  */
+  cursor: pointer;
+  border-bottom: ${(props) =>
+    props.value === props.tabValue ? "2px solid #1f8ecd" : "none"};
+  &:active {
+    border-bottom: 2px solid #1f8ecd;
+  }
+
   /* border-bottom: 2px solid #1f8ecd; */
 `;
 
@@ -197,6 +300,7 @@ const StatsTable = styled.table`
   display: table;
   width: 100%;
   table-layout: auto;
+  border-bottom: 1px solid #cdd2d2;
   background-color: #ededed;
 `;
 const Tbody = styled.tbody`
@@ -255,7 +359,97 @@ const MostItem = styled.li`
     height: 0;
   }
 `;
+const MostNotFoundItem = styled.li`
+  position: relative;
+  display: block;
+  white-space: nowrap;
+  margin-top: 12px;
+  padding-left: 42px;
+  padding-top: 1px;
+  &:first-child {
+    margin-top: 0;
+  }
+  ::after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: "";
+    clear: both;
+    height: 0;
+  }
+`;
+const MostNotFound = styled.div``;
+const MostNotFoundImage = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+`;
+const MostNotFoundImg = styled.img`
+  display: inline-block;
+  vertical-align: middle;
+  text-indent: -99999px;
+  background-position: -106px -1668px;
+  width: 34px;
+  height: 34px;
+  background-image: url("http://opgg-static.akamaized.net/assets/site.png?image=q_auto&v=1596678636");
+`;
+const MostNotFoundText = styled.div`
+font-size: 11px;
+    line-height: 34px;
+    color: #999;
+}
+`;
+
 const MostInfo = styled.div``;
+const MostImage = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+`;
+const MostImg = styled.img`
+  display: block;
+  width: 100%;
+  height: 100%;
+`;
+const MostName = styled.div`
+  margin-bottom: 2px;
+  line-height: 16px;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+const MostWonLose = styled.div`
+  display: inline-block;
+  font-size: 11px;
+  line-height: 12px;
+  color: #333;
+`;
+const MostKDA = styled.div`
+  display: inline-block;
+  line-height: 12px;
+  font-size: 11px;
+  color: #333;
+  font-weight: bold;
+  ::before {
+    display: inline-block;
+    margin-left: 6px;
+    margin-right: 6px;
+    content: "";
+    border-left: 1px solid #e0e3e3;
+    height: 11px;
+    vertical-align: middle;
+  }
+`;
 
 const WinRatio = styled.div``;
 
@@ -275,6 +469,16 @@ const GraphSummary = styled.div`
   width: 90px;
   height: 90px;
   vertical-align: middle;
+`;
+const ChartsContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+  width: 90px;
+  height: 90px;
+  text-align: left;
+  line-height: normal;
+  z-index: 0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `;
 const Text = styled.div`
   position: absolute;
@@ -303,9 +507,7 @@ const KDA = styled.div`
   font-weight: bold;
 `;
 const KDAStats = styled.span`
-  color: #555e5e;
-  /* death */
-  /* color: #c6443e; */
+  color: ${(props) => (props.death ? "#c6443e" : "#555e5e")};
 `;
 
 const KDARatio = styled.div`
@@ -314,9 +516,18 @@ const KDARatio = styled.div`
   margin-top: 7px;
 `;
 const KDAAverage = styled.span`
-  color: #353a3a;
+  color: ${(props) =>
+    props.kda >= 5
+      ? "#e19205"
+      : props.kda >= 4 && props.kda < 5
+      ? "#1f8ecd"
+      : props.kda >= 3 && props.kda < 4
+      ? "#2daf7f"
+      : "#353a3a"};
+  font-weight: bold;
 `;
 const CKRate = styled.span`
+  font-family: Helvetica;
   color: #c6443e;
 `;
 
@@ -351,11 +562,23 @@ const PositionImg = styled.div`
 `;
 const PositionImage = styled.img`
   display: inline-block;
+  width: ${(props) => (props.position === "SUP" ? "36px" : "28px")};
+  height: 28px;
   vertical-align: middle;
   text-indent: -99999px;
-  background-position: -112px -2691px;
-  width: 28px;
-  height: 28px;
+  outline: none;
+  background-position: ${(props) =>
+    props.position === "TOP"
+      ? "-112px -2844px"
+      : props.position === "JNG"
+      ? "-116px -2613px"
+      : props.position === "MID"
+      ? "-112px -2691px"
+      : props.position === "ADC"
+      ? "-112px -2536px"
+      : props.position === "SUP"
+      ? "-104px -2766px"
+      : ""};
   background-image: url("http://opgg-static.akamaized.net/assets/site.png?image=q_auto&v=1596678636");
 `;
 const PositionStat = styled.div`

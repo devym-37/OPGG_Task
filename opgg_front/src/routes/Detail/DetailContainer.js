@@ -8,14 +8,17 @@ class DetailContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      history: this.props.history,
       helmetTitle: this.props.match,
       playerName: null,
       searchResult: null,
       playerMost: null,
       playerMatch: null,
       playerMatchDetail: null,
+      soloRank: null,
+      freeRank: null,
+      title: null,
       item: null,
+      tabValue: "전체",
       loading: false,
       error: null,
     };
@@ -30,9 +33,11 @@ class DetailContainer extends React.Component {
   };
 
   fetchApi = async (term) => {
+    const { playerName } = this.state;
     const searchTerm = encodeURIComponent(term);
     this.setState({
       loading: true,
+      title: playerName,
     });
     try {
       const {
@@ -42,10 +47,20 @@ class DetailContainer extends React.Component {
       const { data: playerMatch } = await apiList.getPlayerMatchList(
         searchTerm
       );
+
+      const soloMatch = playerMatch.games.filter(
+        (match) => match.gameType === "솔랭"
+      );
+      const freeMatch = playerMatch.games.filter(
+        (match) => match.gameType === "자유 5:5 랭크"
+      );
+
       this.setState({
         searchResult,
         playerMost,
         playerMatch,
+        soloRank: soloMatch,
+        freeRank: freeMatch,
       });
     } catch {
       this.setState({
@@ -68,6 +83,15 @@ class DetailContainer extends React.Component {
     this.props.handleReduxPlayer(value);
   };
 
+  handleChangeTab = (event) => {
+    event.preventDefault();
+    console.log("evn");
+    console.log("event.target.value", event.target.dataset.user);
+    this.setState({
+      tabValue: event.target.dataset.user,
+    });
+  };
+
   render() {
     const {
       playerName,
@@ -75,12 +99,18 @@ class DetailContainer extends React.Component {
       searchResult,
       error,
       helmetTitle,
-      history,
       playerMost,
       playerMatch,
+      soloRank,
+      freeRank,
+      title,
+      tabValue,
     } = this.state;
-    const { handleSearchTerm, fetchApi } = this;
 
+    const { handleSearchTerm, fetchApi, handleChangeTab } = this;
+    console.log("tabValue", tabValue);
+    console.log("soloRank", soloRank);
+    console.log("freeRank", freeRank);
     return (
       <DetailPresenter
         helmetTitle={helmetTitle}
@@ -88,9 +118,13 @@ class DetailContainer extends React.Component {
         playerMost={playerMost}
         playerMatch={playerMatch}
         playerName={playerName}
-        history={history}
+        soloRank={soloRank}
+        freeRank={freeRank}
         loading={loading}
+        title={title}
         error={error}
+        tabValue={tabValue}
+        handleChangeTab={handleChangeTab}
         handleSearchTerm={handleSearchTerm}
         fetchApi={fetchApi}
       />
