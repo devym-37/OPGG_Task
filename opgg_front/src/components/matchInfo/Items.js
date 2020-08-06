@@ -1,18 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: "#f5f5f9",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    fontSize: theme.typography.pxToRem(12),
-    border: "1px solid #dadde9",
-  },
-}))(Tooltip);
+import { withStyles } from "@material-ui/core/styles";
 
 const Container = styled.div`
   display: table-cell;
@@ -39,6 +29,9 @@ const ItemImg = styled.img`
   width: 100%;
   height: 100%;
   background-size: 100%;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 const ItemButton = styled.div`
   display: inline-block;
@@ -68,6 +61,21 @@ const TrinKetImg = styled.img`
   vertical-align: middle;
 `;
 
+const ItemName = styled.div`
+  color: #2daf7f;
+`;
+const ItemPrice = styled.span`
+  color: #e19205;
+`;
+
+const CustomTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#222727",
+    color: "#ffffff",
+    fontSize: 11,
+  },
+}))(Tooltip);
+
 const Items = ({ items, itemInfo, itemNumber, ward, gameResult }) => {
   const itemlist = [...items, {}, {}, {}, {}, {}, {}, {}].slice(0, 7);
 
@@ -78,16 +86,27 @@ const Items = ({ items, itemInfo, itemNumber, ward, gameResult }) => {
           {itemlist.map((item, index) => (
             <>
               <Item>
-                <div>
-                  {console.log("itemInfo", itemInfo)}
-                  {console.log("itemNumber", typeof itemNumber)}
-                  {console.log("index", index)}
-                </div>
                 {itemNumber && itemInfo && itemNumber[index] !== undefined ? (
-                  <HtmlTooltip
+                  <CustomTooltip
                     title={
                       <React.Fragment>
-                        {itemInfo[itemNumber[index]].description}
+                        <ItemName>{`${
+                          itemInfo[itemNumber[index]].name
+                        }`}</ItemName>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: itemInfo[itemNumber[index]].description,
+                          }}
+                        ></div>
+
+                        <div>
+                          가격:
+                          <ItemPrice>{` ${
+                            itemInfo[itemNumber[index]].gold.base
+                          } (${
+                            itemInfo[itemNumber[index]].gold.total
+                          })`}</ItemPrice>
+                        </div>
                       </React.Fragment>
                     }
                     placement="top"
@@ -101,7 +120,7 @@ const Items = ({ items, itemInfo, itemNumber, ward, gameResult }) => {
                       }
                       alt="item"
                     />
-                  </HtmlTooltip>
+                  </CustomTooltip>
                 ) : (
                   <ItemImg
                     src={
