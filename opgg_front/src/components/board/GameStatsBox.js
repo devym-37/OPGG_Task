@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Doughnut } from "react-chartjs-2";
 
 const GameStatsBox = ({ playerMatch, tabValue, handleChangeTab, error }) => {
   const totalMatch = playerMatch.summary.wins + playerMatch.summary.losses;
@@ -14,10 +15,15 @@ const GameStatsBox = ({ playerMatch, tabValue, handleChangeTab, error }) => {
       100
   );
   const champions = [...playerMatch.champions, {}, {}, {}].slice(0, 3);
-  const chartData = [
-    { region: "wins", val: playerMatch.summary.wins },
-    { region: "losses", val: playerMatch.summary.losses },
-  ];
+  const chartData = {
+    datasets: [
+      {
+        data: [playerMatch.summary.losses, playerMatch.summary.wins],
+        backgroundColor: ["#ee5a52", "#1f8ecd"],
+        weight: 2,
+      },
+    ],
+  };
   return (
     <>
       <Container>
@@ -65,6 +71,56 @@ const GameStatsBox = ({ playerMatch, tabValue, handleChangeTab, error }) => {
                       <span>{playerMatch.summary.losses}</span>
                       {`패 `}
                     </WinRatio>
+                    <Chart>
+                      <div
+                        style={{
+                          width: 150,
+                          height: 130,
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Doughnut
+                          data={chartData}
+                          options={{
+                            responsive: true,
+                            maintainAspectRatio: true,
+                          }}
+                        />
+                        <Text>
+                          {`${Math.round(
+                            (playerMatch.summary.wins / totalMatch) * 100
+                          )}%`}
+                        </Text>
+                      </div>
+                      <KDAColumn>
+                        <KDA>
+                          <KDAStats>
+                            {(playerMatch.summary.kills / totalMatch).toFixed(
+                              1
+                            )}
+                          </KDAStats>
+                          {` / `}
+                          <KDAStats death={playerMatch.summary.deaths}>
+                            {(playerMatch.summary.deaths / totalMatch).toFixed(
+                              1
+                            )}
+                          </KDAStats>
+                          {` / `}
+                          <KDAStats>
+                            {(playerMatch.summary.assists / totalMatch).toFixed(
+                              1
+                            )}
+                          </KDAStats>
+                        </KDA>
+                        <KDARatio>
+                          <KDAAverage kda={kda}>{`${kda}:1`}</KDAAverage>
+                          <CKRate>{` (${ckRatio}%)`}</CKRate>
+                        </KDARatio>
+                      </KDAColumn>
+                    </Chart>
                   </TdTitle>
                   <MostChampion>
                     <MostList>
@@ -119,41 +175,8 @@ const GameStatsBox = ({ playerMatch, tabValue, handleChangeTab, error }) => {
                         })}
                     </MostList>
                   </MostChampion>
-                  <TdTitle>선호 포지션 (랭크)</TdTitle>
-                </TrItems>
-                <TrItems>
-                  <Summary>
-                    <WinRatioGraph>
-                      <GraphSummary>
-                        <ChartsContainer></ChartsContainer>
-                        <Text>
-                          {`${Math.round(
-                            (playerMatch.summary.wins / totalMatch) * 100
-                          )}%`}
-                        </Text>
-                      </GraphSummary>
-                    </WinRatioGraph>
-                  </Summary>
-                  <KDAInfo>
-                    <KDA>
-                      <KDAStats>
-                        {(playerMatch.summary.kills / totalMatch).toFixed(1)}
-                      </KDAStats>
-                      {` / `}
-                      <KDAStats death={playerMatch.summary.deaths}>
-                        {(playerMatch.summary.deaths / totalMatch).toFixed(1)}
-                      </KDAStats>
-                      {` / `}
-                      <KDAStats>
-                        {(playerMatch.summary.assists / totalMatch).toFixed(1)}
-                      </KDAStats>
-                    </KDA>
-                    <KDARatio>
-                      <KDAAverage kda={kda}>{`${kda}:1`}</KDAAverage>
-                      <CKRate>{` (${ckRatio}%)`}</CKRate>
-                    </KDARatio>
-                  </KDAInfo>
-                  <Positions>
+                  <TdTitle>
+                    <div>선호 포지션 (랭크)</div>
                     <PositionInfo>
                       {positions && positions[0].position !== undefined ? (
                         positions.map((position) => {
@@ -226,7 +249,7 @@ const GameStatsBox = ({ playerMatch, tabValue, handleChangeTab, error }) => {
                         </NotFoundInfo>
                       )}
                     </PositionInfo>
-                  </Positions>
+                  </TdTitle>
                 </TrItems>
               </Tbody>
             </StatsTable>
@@ -273,8 +296,17 @@ const GameType = styled.li`
   &:active {
     border-bottom: 2px solid #1f8ecd;
   }
+`;
 
-  /* border-bottom: 2px solid #1f8ecd; */
+const Chart = styled.div`
+  display: flex;
+`;
+
+const KDAColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const StatsBox = styled.div`
@@ -312,9 +344,10 @@ const TrItems = styled.tr`
   display: table-row;
   vertical-align: inherit;
   border-color: inherit;
+  border-bottom: 1px solid #cdd2d2;
 `;
 const TdTitle = styled.td`
-  padding: 16px 0 14px 20px;
+  padding: 16px 0 0 20px;
   line-height: 14px;
   font-size: 12px;
   color: #666;
@@ -398,10 +431,9 @@ const MostNotFoundImg = styled.img`
   background-image: url("http://opgg-static.akamaized.net/assets/site.png?image=q_auto&v=1596678636");
 `;
 const MostNotFoundText = styled.div`
-font-size: 11px;
-    line-height: 34px;
-    color: #999;
-}
+  font-size: 11px;
+  line-height: 34px;
+  color: #999;
 `;
 
 const MostInfo = styled.div``;
@@ -453,53 +485,19 @@ const MostKDA = styled.div`
 
 const WinRatio = styled.div``;
 
-const Summary = styled.td`
-  display: table-cell;
-  padding: 0 0 0 24px;
-  vertical-align: top;
-`;
-const WinRatioGraph = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-`;
-const GraphSummary = styled.div`
-  position: relative;
-  display: inline-block;
-  width: 90px;
-  height: 90px;
-  vertical-align: middle;
-`;
-const ChartsContainer = styled.div`
-  position: relative;
-  overflow: hidden;
-  width: 90px;
-  height: 90px;
-  text-align: left;
-  line-height: normal;
-  z-index: 0;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-`;
 const Text = styled.div`
-  position: absolute;
+  display: flex;
+  justify-content: center;
   left: 0;
   top: 50%;
   text-align: center;
   width: 100%;
-  margin-top: -8px;
+  margin-top: 5px;
   line-height: 16px;
   font-size: 14px;
   color: #555;
 `;
 
-const KDAInfo = styled.td`
-  display: table-cell;
-  color: #879292;
-  text-align: center;
-  vertical-align: top;
-  padding-top: 18px;
-  width: 164px;
-`;
 const KDA = styled.div`
   color: #879292;
   font-size: 11px;
@@ -531,17 +529,12 @@ const CKRate = styled.span`
   color: #c6443e;
 `;
 
-const Positions = styled.td`
-  display: table-cell;
-  width: 183px;
-  border-left: 1px solid #cdd2d2;
-  white-space: nowrap;
-  vertical-align: middle;
-`;
 const PositionInfo = styled.ul`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
   list-style: none;
-  margin: 0;
-  padding: 0 16px 0 12px;
   font-size: 0;
 `;
 const PositionItem = styled.li`
@@ -563,7 +556,7 @@ const PositionImg = styled.div`
 const PositionImage = styled.img`
   display: inline-block;
   width: ${(props) => (props.position === "SUP" ? "36px" : "28px")};
-  height: 28px;
+  height: 26px;
   vertical-align: middle;
   text-indent: -99999px;
   outline: none;
@@ -577,7 +570,7 @@ const PositionImage = styled.img`
       : props.position === "ADC"
       ? "-112px -2536px"
       : props.position === "SUP"
-      ? "-104px -2766px"
+      ? "-104px -2767px"
       : ""};
   background-image: url("http://opgg-static.akamaized.net/assets/site.png?image=q_auto&v=1596678636");
 `;
