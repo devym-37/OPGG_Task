@@ -21,6 +21,7 @@
 ```
 $ cd ~/opgg_front
 $ npm install / yarn install
+$ npm i chart.js
 $ npm start / yarn start
 ```
 
